@@ -56,6 +56,7 @@ if args.cuda:
     model.cuda()
 
 optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
+optimizer = optim.Adam(model.parameters(), lr = args.lr / 100.)
 
 def train(epoch):
     model.train()
@@ -65,7 +66,8 @@ def train(epoch):
         data, target = Variable(data), Variable(target)
         optimizer.zero_grad()
         output = model(data)
-        loss = F.nll_loss(output, target)
+        #loss = F.nll_loss(output, target)
+        loss = model.ceriation(output, target)
         loss.backward()
         optimizer.step()
         if batch_idx % args.log_interval == 0:
